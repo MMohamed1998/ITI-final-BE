@@ -3,7 +3,7 @@ mongoose.set("strictQuery", true);
 
 export const connectionDB = async () => {
   mongoose
-    .connect(process.env.DB_LOCAL)
+    .connect(process.env.DB_ONLINE)
     .then(() => {
       console.log("database Connected");
     })
