@@ -1,6 +1,6 @@
 import { compare, hash } from "../../../utils/HashAndCompare.js";
 import userModel from "../../../../DB/model/User.model.js";
-import {generateToken,generateTokenAndSetCookie,verifyToken} from "../../../utils/GenerateAndVerifyToken.js";
+import {generateToken,verifyToken} from "../../../utils/GenerateAndVerifyToken.js";
 import sendEmail from "../../../utils/email.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 import { customAlphabet } from "nanoid";

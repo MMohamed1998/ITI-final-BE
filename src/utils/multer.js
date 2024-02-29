@@ -1,13 +1,52 @@
+// import multer from "multer";
+// import { nanoid } from "nanoid";
+// import fs from "fs";
+// import path from "path";
+// import { fileURLToPath } from "url";
+// const __dirname = fileURLToPath(import.meta.url);
+// export const fileValidation = {
+//   image: ["image/jpeg", "image/png", "image/gif"],
+//   file: ["application/pdf", "application/msword"],
+//   video: ["video/mp4"],
+// };
+// export function fileUpload(customPath = "general", customValidation = []) {
+//   const fullPath = path.join(__dirname, "..", "..", "uploads", `${customPath}`);
+//   if (!fs.existsSync(fullPath)) {
+//     fs.mkdirSync(fullPath, { recursive: true });
+//   }
+//   const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//       cb(null, fullPath);
+//     },
+//     filename: (req, file, cb) => {
+//       const fullName =
+//         Date.now() +
+//         "-" +
+//         nanoid() +
+//         Math.round(Math.random() * 1e9) +
+//         file.originalname;
+//       file.finalDest = `uploads/${customPath}/${fullName}`;
+//       cb(null, fullName);
+//     },
+//   });
+//   function fileFilter(req, file, cb) {
+//     if (customValidation.includes(file.mimetype)) {
+//       cb(null, true);
+//     } else {
+//       cb("In-valid file format", false);
+//     }
+//   }
+//   const upload = multer({ storage, fileFilter });
+//   return upload;
+// }
+
 import multer from "multer";
 import { nanoid } from "nanoid";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+
 const __dirname = fileURLToPath(import.meta.url);
-
-
-
-
 
 export const fileValidation = {
   image: ["image/jpeg", "image/png", "image/gif"],
@@ -15,12 +54,18 @@ export const fileValidation = {
   video: ["video/mp4"],
 };
 
-
 export function fileUpload(customPath = "general", customValidation = []) {
   const fullPath = path.join(__dirname, "..", "..", "uploads", `${customPath}`);
-  if (!fs.existsSync(fullPath)) {
-    fs.mkdirSync(fullPath, { recursive: true });
-  }
+
+  // Create directory asynchronously with error handling
+  fs.mkdir(fullPath, { recursive: true }, (err) => {
+    if (err) {
+      console.error("Error creating directory:", err);
+    } else {
+      console.log("Directory created successfully:", fullPath);
+    }
+  });
+
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, fullPath);
@@ -36,14 +81,17 @@ export function fileUpload(customPath = "general", customValidation = []) {
       cb(null, fullName);
     },
   });
+
   function fileFilter(req, file, cb) {
     if (customValidation.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb("In-valid file format", false);
+      cb(new Error("Invalid file format"));
     }
   }
+
   const upload = multer({ storage, fileFilter });
+
   return upload;
 }
 

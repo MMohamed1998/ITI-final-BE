@@ -64,9 +64,13 @@ app.use(`/user`, userRouter);
 app.use(`/messages`, messageRouter);
 app.use(`/project`, projectRouter);
 app.use(`/offer`, offerRouter);
+app.all("/", (req, res, next) => {
+  res.status(500).send("hello in app");
+});
 app.all("*", (req, res, next) => {
   res.status(500).send("In-valid Routing Plz check url  or  method");
 });
+
 // Error Handling Middleware should be placed at the end of all middlewares
 app.use(globalErrorHandling);
 
