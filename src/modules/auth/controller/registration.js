@@ -1,6 +1,6 @@
 import { compare, hash } from "../../../utils/HashAndCompare.js";
 import userModel from "../../../../DB/model/User.model.js";
-import {generateToken,verifyToken} from "../../../utils/GenerateAndVerifyToken.js";
+import {generateToken,generateTokenAndSetCookie,verifyToken} from "../../../utils/GenerateAndVerifyToken.js";
 import sendEmail from "../../../utils/email.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 import { customAlphabet } from "nanoid";
@@ -137,7 +137,6 @@ export const signup = asyncHandler(async (req, res, next) => {
     city,
     role,
   });
-  const cokieToken=generateTokenAndSetCookie(_id._id, res);
 
   res.status(200).json({
     data: _id,
