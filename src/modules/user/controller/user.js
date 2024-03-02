@@ -186,7 +186,7 @@ export const addUserImage = asyncHandler(async (req, res, next) => {
       fs.unlinkSync(oldImagePath);
     }
   }
-  const fullPath = profileImage.finalDest;
+  const fullPath = profileImage.path;
   await userModel.findByIdAndUpdate(userId,
     {
       urlToUpdate: fullPath,
