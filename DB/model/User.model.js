@@ -65,8 +65,8 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
-// userSchema.post("init", function (doc) {
-//   doc.image = process.env.HOST + doc.image;
-// });
+userSchema.post("init", function (doc) {
+  doc.image = process.env.HOST + doc.urlToUpdate;
+});
 const userModel = mongoose.models.User || model("User", userSchema);
 export default userModel;
