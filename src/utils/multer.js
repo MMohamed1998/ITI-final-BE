@@ -18,7 +18,6 @@ export const fileValidation = {
 
 export function fileUpload(customPath = "general", customValidation = []) {
   const fullPath = path.join(__dirname, "..", "..", "uploads", `${customPath}`);
-  console.log(fullPath)
   if (!fs.existsSync(fullPath)) {
     fs.mkdirSync(fullPath, { recursive: true });
   }
