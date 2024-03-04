@@ -8,8 +8,7 @@ import { asyncHandler } from "../../../utils/errorHandling.js";
 export const getProjects = asyncHandler(async (req, res, next) => {
   const projects =await projectModel.find().populate([{
     path: 'offer'
-}]).populate('createdBy') // Populate the 'createdBy' field
-.populate('category');
+}]).populate('createdBy')
   res.status(200).json({ message: `done`, data:projects,success:true });
 });
 

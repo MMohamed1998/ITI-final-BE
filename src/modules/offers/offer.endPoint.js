@@ -5,4 +5,5 @@ export const endPoint = {
   updateOffer: [roles.Designer],
   deleteOffer: [roles.Designer],
   userOffer: [roles.Designer],
+  userOffer: [roles.Designer],
 };

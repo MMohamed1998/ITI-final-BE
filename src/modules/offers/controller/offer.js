@@ -4,9 +4,23 @@ import userModel from "../../../../DB/model/User.model.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 
 export const getOffer = asyncHandler(async (req, res, next) => {
+  console.log("HELLO")
   const offerId =req.params.offerId;
-  const offers = await offerModel.find({ offerId: offerId});
+  const offers = await offerModel.findOne({ _id: offerId}).populate('createdBy');
   res.status(200).json({ message: `done`, data: offers, success: true });
+});
+
+export const getUserOffers = asyncHandler(async (req, res, next) => {
+  console.log("BYE")
+  const userId = req.user;
+  const offers = await offerModel.find({createdBy:userId }).populate([{
+    path: 'project'
+}]); 
+  if (!offers || offers.length === 0) {
+    return next(new Error("No offers Found", { cause: 400 }));
+
+  }
+  res.status(200).json({ message: `User offers`, data: offers, success: true });
 });
 
 export const addOffer = asyncHandler(async (req, res, next) => {

@@ -40,5 +40,10 @@ const offerSchema = new Schema(
     timestamps: true,
   }
 );
+
+offerSchema.pre(/^find/, function(next) {
+  this.populate('createdBy')
+  next();
+});
 const offerModel = mongoose.models.Offer || model("Offer", offerSchema);
 export default offerModel;

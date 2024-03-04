@@ -22,3 +22,4 @@ export const deleteOffer=Joi.object({
 export const oneOffer=Joi.object({
     offerId:generalFields.id
 }).required();
+ 

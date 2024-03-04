@@ -448,7 +448,7 @@ export const logOut = asyncHandler(async (req, res, next) => {
   }
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
-  user.status = "online";
+  user.status = "offline";
   await user.save();
   res.status(200).send('Logged out successfully');
 });

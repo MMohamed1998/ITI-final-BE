@@ -24,6 +24,8 @@ export const login = Joi.object({
   password: generalFields.password,
 }).required();
 
+
+
 export const sendCode = Joi.object({
   email: generalFields.email,
   password: generalFields.password,

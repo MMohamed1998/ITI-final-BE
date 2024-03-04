@@ -11,6 +11,9 @@ const router = Router();
 
 router.get('/:offerId',validation(validators.oneOffer) , offerController.getOffer)
 
+router.get('/usersoffers',auth(endPoint.userOffer),
+offerController.getUserOffers)
+
 router.post('/addOffer',auth(endPoint.addOffer),
 validation(validators.addOffer),
 offerController.addOffer)
