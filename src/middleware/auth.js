@@ -9,19 +9,17 @@ export const roles = {
 export const auth = (accessRoles = []) => {
   return asyncHandler(async (req, res, next) => {
 		const {accessToken,refreshToken} = req.cookies;
+	  console.log("access ="accessToken,refreshToken)
     if (!accessToken&&!refreshToken) {
       return next(new Error("please Login to continue", { cause: 400 }));
     }
     const decoded = verifyToken( {accessToken} );
-      console.log("first",decoded)
-      console.log((!decoded?.userId))
     if (!decoded?.userId) {
       return next(new Error("In-valid token payload", { cause: 400 }));
     }
     const user = await userModel
       .findById(decoded.userId)
       .select("userName image role changePasswordTime");
-      console.log(user)
     if (!user) {
       return next(new Error("Not register account", { cause: 401 }));
     }
