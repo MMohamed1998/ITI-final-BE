@@ -8,6 +8,7 @@ export const roles = {
 };
 export const auth = (accessRoles = []) => {
   return asyncHandler(async (req, res, next) => {
+	  console.log(req)
 		const {accessToken,refreshToken} = req.cookies;
 	  console.log("access =",accessToken,refreshToken)
     if (!accessToken&&!refreshToken) {
