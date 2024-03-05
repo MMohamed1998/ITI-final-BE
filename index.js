@@ -22,7 +22,6 @@ dotenv.config({ path: path.join(__dirname, "./config/.env") });
 const port = process.env.PORT || 5000;
 const app = express();
 const allowedOrigins = ['http://localhost:5174', 'http://localhost:5173'];
-
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -37,8 +36,10 @@ app.use(morgan("dev"));
 app.use(express.json({}));
 app.use(cookieParser());
 app.use((req, res, next) => {
-  const { accessToken, refreshToken } = req.cookies;
 
+
+  const { accessToken, refreshToken } = req.cookies;
+  console.log(accessToken,refreshToken)
   if (!accessToken && refreshToken) {
     jwt.verify(refreshToken, process.env.TOKEN_SIGNATURE, (err, decoded) => {
       if (err) {

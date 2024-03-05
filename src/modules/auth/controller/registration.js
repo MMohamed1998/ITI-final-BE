@@ -450,5 +450,5 @@ export const logOut = asyncHandler(async (req, res, next) => {
   res.clearCookie('refreshToken');
   user.status = "offline";
   await user.save();
-  res.status(200).send('Logged out successfully');
+  res.status(200).json({ message: "logout successfully", success: true });
 });

@@ -5,7 +5,8 @@ export const addProject = Joi.object({
     title: Joi.string().min(25).required(),
     description: Joi.string().required(),
     expectedPrice: Joi.string().valid("25 - 50$","50 - 100$","100 - 250$","250 - 500$","500 - 1000$","1000 - 2500$","2500 -5000$","5000 - 10000$").required(),
-    expectedTime: Joi.number().min(1).max(90).required()
+    expectedTime: Joi.number().min(1).max(90).required(), 
+    category:generalFields.id,
   
 }).required();
 
