@@ -9,7 +9,7 @@ export const roles = {
 export const auth = (accessRoles = []) => {
   return asyncHandler(async (req, res, next) => {
 		const {accessToken,refreshToken} = req.cookies;
-	  console.log("access ="accessToken,refreshToken)
+	  console.log("access =",accessToken,refreshToken)
     if (!accessToken&&!refreshToken) {
       return next(new Error("please Login to continue", { cause: 400 }));
     }
