@@ -45,28 +45,7 @@ const projectSchema = new Schema(
         ref : 'User' // Reference the User model
     },
     skills:{
-      type:String,
-        enum:["Blender",
-        "Unity",
-        "Unreal Engine",
-        "Autodesk Maya",
-        "Autodesk 3ds Max",
-        "CryEngine",
-        "Godot Engine",
-        "CesiumJS",
-        "Three.js",
-        "Amazon Sumerian",
-        "Autodesk Mudbox",
-        "Substance Painter",
-        "Houdini",
-        "Cinema 4D",
-        "Modo",
-        "SketchUp",
-        "ZBrush",
-        "PlayCanvas",
-        "Armory",
-        "Lumberyard (Amazon)",
-        "Torque 3D"]
+      type:[String],
     }
   },
   {
