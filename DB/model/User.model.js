@@ -57,9 +57,6 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    skills:{
-      type:[String],
-    },
     changePasswordTime: {
       type: Date,
     },

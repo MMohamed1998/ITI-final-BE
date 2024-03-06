@@ -31,7 +31,7 @@ export const userProfile = asyncHandler(async (req, res, next) => {
   });
 
 export const addUsers = asyncHandler(async (req, res, next) => {
-  const { firstName, lastName, email,gender, password,phone,address,city, role } = req.body;
+  const { firstName, lastName, email,gender, password,phone,address,city, role,skills } = req.body;
 
   if (await userModel.findOne({ email })) {
     return next(
@@ -162,6 +162,7 @@ export const addUsers = asyncHandler(async (req, res, next) => {
     phone,
     city,
     role,
+    skills
   });
   res.status(200).json({ userId: user, message: "User created successfully!",success:true });
 });
@@ -199,7 +200,7 @@ export const addUserImage = asyncHandler(async (req, res, next) => {
 });
 
 export const updateUsers = asyncHandler(async (req, res, next) => {
-  const { firstName, lastName, password, gender, role } = req.body;
+  const { firstName, lastName, password, gender, role,skills } = req.body;
   const userId = req.params._id;
   const hashPassword = hash({ plaintext: password });
 
@@ -210,6 +211,7 @@ export const updateUsers = asyncHandler(async (req, res, next) => {
     password: hashPassword,
     gender,
     role,
+    skills
   });
   res.status(200).json({ message: "User updated successfully!",success:true });
 });
@@ -243,21 +245,50 @@ export const changePassword = asyncHandler(async (req, res, next) => {
 
 export const deleteUser = asyncHandler(async (req, res, next) => {
   const userId = req.params.userId;
+  const adminId =req.user;
+  
+  //checking for the owner of the account to be deleted
   const user = await userModel.findById(userId);
+  const admin = await userModel.findById(adminId);
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));
   }
-  if (user.image) {
-    const oldImagePath = path.join(
-      __dirname,'..','..','..','..'
-      ,`${user.urlToUpdate}`
-    );
-    const imageurl =user.image
-    const words = imageurl.split(' ');
-    if (fs.existsSync(oldImagePath)) {
-      fs.unlinkSync(oldImagePath);
+  if(userId==adminId) {
+    if (user.image) {
+      const oldImagePath = path.join(
+        __dirname,'..','..','..','..'
+        ,`${user.urlToUpdate}`
+      );
+      const imageurl =user.image
+      const words = imageurl.split(' ');
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+   await userModel.findByIdAndDelete( userId);
+   return res.status(200).json({ message: "User deleted successfully!",success:true });
+  }
+  if (userId!=adminId){
+    if(admin.role=="Admin"){
+      if (user.image) {
+        const oldImagePath = path.join(
+          __dirname,'..','..','..','..'
+          ,`${user.urlToUpdate}`
+        );
+        const imageurl =user.image
+        const words = imageurl.split(' ');
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
+     await userModel.findByIdAndDelete( userId);
+      return res.status(200).json({ message: "User deleted successfully!",success:true });
     }
   }
- await userModel.findByIdAndDelete( userId);
-  res.status(200).json({ message: "User deleted successfully!",success:true });
+  return next(new Error("No authorized to delete user!", { cause: 400 }));
+
+  
+  
+
+  
 });

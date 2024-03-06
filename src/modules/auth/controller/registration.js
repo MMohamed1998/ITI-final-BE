@@ -6,7 +6,7 @@ import { asyncHandler } from "../../../utils/errorHandling.js";
 import { customAlphabet } from "nanoid";
 
 export const signup = asyncHandler(async (req, res, next) => {
-  const { firstName, lastName, email,gender, password,phone,address,city, role } = req.body;
+  const { firstName, lastName, email,gender, password,phone,address,city, role,skills } = req.body;
   const checkUser = await userModel.findOne({ email });
   if (checkUser) {
     return next(new Error("email exist", { cause: 409 }));
@@ -14,7 +14,7 @@ export const signup = asyncHandler(async (req, res, next) => {
   const token = generateToken({
     payload: { email },
     signature: process.env.EMAIL_TOKEN,
-    expiresIn: 60 * 30,
+    expiresIn: 60 * 5,
   });
   const refreshToken = generateToken({
     payload: { email },
@@ -136,6 +136,7 @@ export const signup = asyncHandler(async (req, res, next) => {
     phone,
     city,
     role,
+    skills
   });
 
   res.status(200).json({
@@ -313,11 +314,11 @@ export const login = asyncHandler(async (req, res, next) => {
   }
   const access_token = generateToken({
     payload: { id: user._id, role: user.role, status: user.status },
-    expiresIn: 60 * 60 * 24,
+    expiresIn: 60 * 60 * 24, 
   });
   const refresh_token = generateToken({
     payload: { id: user._id, role: user.role, status: user.status },
-    expiresIn: 60 * 60 * 24 * 365,
+    expiresIn: 60 * 60 * 24 * 365, 
   });
   user.status = "online";
   await user.save();
@@ -450,6 +451,7 @@ export const logOut = asyncHandler(async (req, res, next) => {
   
   const userId =req.user
   const user = await userModel.findById(userId);
+  console.log(user)
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));
   }

@@ -16,6 +16,7 @@ export const signup = Joi.object({
   address:Joi.string(),
   city:Joi.string(),
   role: Joi.string().valid("User", "Designer"),
+  skills:Joi.array()
   
 }).required();
 

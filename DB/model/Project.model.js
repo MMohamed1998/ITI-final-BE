@@ -46,6 +46,7 @@ const projectSchema = new Schema(
     },
     skills:{
       type:[String],
+        
     }
   },
   {

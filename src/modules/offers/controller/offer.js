@@ -4,21 +4,22 @@ import userModel from "../../../../DB/model/User.model.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 
 export const getOffer = asyncHandler(async (req, res, next) => {
-  console.log("HELLO")
-  const offerId =req.params.offerId;
-  const offers = await offerModel.findOne({ _id: offerId}).populate('createdBy');
+  const offerId = req.params.offerId;
+  const offers = await offerModel
+    .findOne({ _id: offerId })
+    .populate("createdBy");
   res.status(200).json({ message: `done`, data: offers, success: true });
 });
 
 export const getUserOffers = asyncHandler(async (req, res, next) => {
-  console.log("BYE")
   const userId = req.user;
-  const offers = await offerModel.find({createdBy:userId }).populate([{
-    path: 'project'
-}]); 
+  const offers = await offerModel.find({ createdBy: userId }).populate([
+    {
+      path: "project",
+    },
+  ]);
   if (!offers || offers.length === 0) {
     return next(new Error("No offers Found", { cause: 400 }));
-
   }
   res.status(200).json({ message: `User offers`, data: offers, success: true });
 });
@@ -38,7 +39,7 @@ export const addOffer = asyncHandler(async (req, res, next) => {
     );
   }
   const existingOffer = await offerModel.findOne({ createdBy: userId });
-  if (existingOffer){
+  if (existingOffer) {
     if (project == existingOffer.project) {
       return next(
         new Error("You have already added an offer for this Project", {
@@ -76,7 +77,11 @@ export const updateOffer = asyncHandler(async (req, res, next) => {
     return next(new Error("offer not found", { code: 404 }));
   }
   if (offer.createdBy != userId) {
-    return next(new Error("You don't have permission to perform this action.", { code: 404 }));
+    return next(
+      new Error("You don't have permission to perform this action.", {
+        code: 404,
+      })
+    );
   }
 
   let newOffer = await offerModel.findByIdAndUpdate(
@@ -94,13 +99,24 @@ export const updateOffer = asyncHandler(async (req, res, next) => {
 
 export const deleteOffer = asyncHandler(async (req, res, next) => {
   const userId = req.user;
+  const user = await userModel.findById(userId);
   const offerId = req.params.offerId;
   const offer = await offerModel.findById(offerId);
   if (!offer) {
     return next(new Error("offer not found", { code: 404 }));
   }
-  if (offer.createdBy != userId) {
-    return next(new Error("You don't have permission to perform this action.", { code: 404 }));
+  if (user.role === "Admin") {
+    await offerModel.findByIdAndDelete(offer._id);
+    return res
+      .status(200)
+      .json({ message: "deleted successfully ", success: true });
+  }
+  if (offer.createdBy._id != userId) {
+    return next(
+      new Error("You don't have permission to perform this action.", {
+        code: 404,
+      })
+    );
   }
 
   await offerModel.findByIdAndDelete(offer._id);
