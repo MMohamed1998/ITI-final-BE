@@ -453,7 +453,7 @@ export const logOut = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));
   }
-  if(user.status = "offline"){
+  if(user.status == "offline"){
     return next(new Error("please login first!", { cause: 400 }));
 
   }
