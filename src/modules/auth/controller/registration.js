@@ -14,7 +14,7 @@ export const signup = asyncHandler(async (req, res, next) => {
   const token = generateToken({
     payload: { email },
     signature: process.env.EMAIL_TOKEN,
-    expiresIn: 60 * 5,
+    expiresIn: 60 * 60 * 24,
   });
   const refreshToken = generateToken({
     payload: { email },
