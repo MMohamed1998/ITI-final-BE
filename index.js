@@ -35,29 +35,35 @@ app.use(cors({
 app.use(morgan("dev"));
 app.use(express.json({}));
 app.use(cookieParser());
-app.use((req, res, next) => {
-
-
-  const { accessToken, refreshToken } = req.cookies;
-  console.log(accessToken,refreshToken)
-  if (!accessToken && refreshToken) {
-    jwt.verify(refreshToken, process.env.TOKEN_SIGNATURE, (err, decoded) => {
-      if (err) {
-        return res.json({ valid: false, message: "Invalid Refresh Token" });
-      } else {
-        const newAccessToken = jwt.sign({ userId: decoded.userId }, process.env.TOKEN_SIGNATURE, { expiresIn: '1m' });
-        res.cookie("accessToken", newAccessToken, {
-          maxAge: 60 * 1000,
-          httpOnly: true,
-          sameSite: "strict",
-          secure: process.env.NODE_ENV !== "DEV",
-        });
-        req.cookies.accessToken = newAccessToken;
-      }
-    });
-  }
-  next();
-});
+// app.use((req, res, next) => {
+// // const {cookie}=req.headers
+// // console.log(req.headers.cookie)
+// // function getCookie(name) {
+// //     const match = cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+// //     return match ? match[2] : null;
+// //   }
+// //   console.log("good",getCookie('refreshToken'))
+//   const { accessToken, refreshToken } = req.cookies;
+//   console.log( "index",accessToken,refreshToken)
+//   if (!accessToken && refreshToken) {
+//     jwt.verify(refreshToken, process.env.TOKEN_SIGNATURE, (err, decoded) => {
+//       if (err) {
+//         return res.json({ valid: false, message: "Invalid Refresh Token" });
+//       } else {
+//         const newAccessToken = jwt.sign({ userId: decoded.userId }, process.env.TOKEN_SIGNATURE, { expiresIn: '1m' });
+//         res.cookie("accessToken", newAccessToken, {
+//           maxAge: 60 * 1000,
+//           httpOnly: true,
+//           sameSite: "strict",
+//           secure: process.env.NODE_ENV !== "DEV",
+//         });
+//         console.log("new",newAccessToken)
+//         req.cookies.accessToken = newAccessToken;
+//       }
+//     });
+//   }
+//   next();
+// });
 app.set("case sensitive routing", true);
 app.use("/uploads", express.static("./src/uploads"));
 app.use(`/auth`, authRouter);

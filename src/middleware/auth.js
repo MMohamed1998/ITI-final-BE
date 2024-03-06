@@ -8,18 +8,20 @@ export const roles = {
 };
 export const auth = (accessRoles = []) => {
   return asyncHandler(async (req, res, next) => {
-	  console.log(req)
-		const {accessToken,refreshToken} = req.cookies;
-	  console.log("access =",accessToken,refreshToken)
-    if (!accessToken&&!refreshToken) {
-      return next(new Error("please Login to continue", { cause: 400 }));
+    const { authorization } = req.headers;
+    if (!authorization?.startsWith(process.env.BEARER_KEY)) {
+      return next(new Error("In-valid bearer key", { cause: 400 }));
     }
-    const decoded = verifyToken( {accessToken} );
-    if (!decoded?.userId) {
+    const token = authorization.split(process.env.BEARER_KEY)[1];
+    if (!token) {
+      return next(new Error("In-valid token", { cause: 400 }));
+    }
+    const decoded = verifyToken({ token });
+    if (!decoded?.id) {
       return next(new Error("In-valid token payload", { cause: 400 }));
     }
     const user = await userModel
-      .findById(decoded.userId)
+      .findById(decoded.id)
       .select("userName image role changePasswordTime");
     if (!user) {
       return next(new Error("Not register account", { cause: 401 }));
@@ -31,8 +33,7 @@ export const auth = (accessRoles = []) => {
     if (!accessRoles.includes(user.role)) {
       return next(new Error("Not authorized user", { cause: 403 }));
     }
-    req.user = decoded.userId;
-    console.log(req.user)
+    req.user = decoded.id;
     return next();
   });
 };

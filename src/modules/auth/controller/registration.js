@@ -1,6 +1,6 @@
 import { compare, hash } from "../../../utils/HashAndCompare.js";
 import userModel from "../../../../DB/model/User.model.js";
-import {generateToken,generateTokenAndSetCookie,verifyToken} from "../../../utils/GenerateAndVerifyToken.js";
+import {generateToken,verifyToken} from "../../../utils/GenerateAndVerifyToken.js";
 import sendEmail from "../../../utils/email.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 import { customAlphabet } from "nanoid";
@@ -311,13 +311,20 @@ export const login = asyncHandler(async (req, res, next) => {
   if (!compare({ plaintext: password, hashValue: user.password })) {
     return next(new Error("invalid email or password", { cause: 400 }));
   }
-  const {accessToken,refreshToken}=generateTokenAndSetCookie(user._id, res);
+  const access_token = generateToken({
+    payload: { id: user._id, role: user.role, status: user.status },
+    expiresIn: 60 * 30,
+  });
+  const refresh_token = generateToken({
+    payload: { id: user._id, role: user.role, status: user.status },
+    expiresIn: 60 * 60 * 24 * 365,
+  });
   user.status = "online";
   await user.save();
   res.status(200).json({
     message: "User login successfully!",
-    accessToken,
-    refreshToken,
+    access_token,
+    refresh_token,
     user,
     success: true,
   });
@@ -446,8 +453,6 @@ export const logOut = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));
   }
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken');
   user.status = "offline";
   await user.save();
   res.status(200).json({ message: "logout successfully", success: true });

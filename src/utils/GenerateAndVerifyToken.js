@@ -10,39 +10,39 @@ export const generateToken = ({
   });
   return token;
 };
-export const generateTokenAndSetCookie = (userId, res) => {
-  const accessToken = jwt.sign({ userId }, process.env.TOKEN_SIGNATURE, {
-    expiresIn:"1m",
-  });
+// export const generateTokenAndSetCookie = (userId, res) => {
+//   const accessToken = jwt.sign({ userId }, process.env.TOKEN_SIGNATURE, {
+//     expiresIn:"1m",
+//   });
 
-  const refreshToken = jwt.sign({ userId }, process.env.TOKEN_SIGNATURE, {
-    expiresIn: "1y",
-  });
+//   const refreshToken = jwt.sign({ userId }, process.env.TOKEN_SIGNATURE, {
+//     expiresIn: "1y",
+//   });
 
-  res.cookie("accessToken", accessToken, {
-    maxAge: 60 * 1000, // MS
-    // httpOnly: true, // prevent XSS attacks cross-site scripting attacks
-    sameSite: "none", // CSRF attacks cross-site request forgery attacks
-    secure: process.env.NODE_ENV !== "DEV",
-  });
+//   res.cookie("accessToken", accessToken, {
+//     maxAge: 60 * 1000, // MS
+//     // httpOnly: true, // prevent XSS attacks cross-site scripting attacks
+//     sameSite: "strict", // CSRF attacks cross-site request forgery attacks
+//     secure: process.env.NODE_ENV !== "DEV",
+//   });
 
-  res.cookie("refreshToken", refreshToken, {
-    maxAge: 365 * 24 * 60 * 60 * 1000, // MS
-    // httpOnly: true, // prevent XSS attacks cross-site scripting attacks
-    sameSite: "none", // CSRF attacks cross-site request forgery attacks
-    secure: process.env.NODE_ENV !== "DEV",
-  });
-  return  {accessToken, refreshToken} ;
-};
+//   res.cookie("refreshToken", refreshToken, {
+//     maxAge: 365 * 24 * 60 * 60 * 1000, // MS
+//     // httpOnly: true, // prevent XSS attacks cross-site scripting attacks
+//     sameSite: "strict", // CSRF attacks cross-site request forgery attacks
+//     secure: process.env.NODE_ENV !== "DEV",
+//   });
+//   return  {accessToken, refreshToken} ;
+// };
 
 export const verifyToken = ({
-  accessToken,
+  token,
   signature = process.env.TOKEN_SIGNATURE,
 } = {}) => {
-  const decoded = jwt.verify(accessToken, signature);
-  
+  const decoded = jwt.verify(token, signature);
   return decoded;
 };
+
 
 
 
