@@ -313,7 +313,7 @@ export const login = asyncHandler(async (req, res, next) => {
   }
   const access_token = generateToken({
     payload: { id: user._id, role: user.role, status: user.status },
-    expiresIn: 60 * 60 * 24,,
+    expiresIn: 60 * 60 * 24,
   });
   const refresh_token = generateToken({
     payload: { id: user._id, role: user.role, status: user.status },
