@@ -43,7 +43,7 @@ const projectSchema = new Schema(
     updatedBy:{
         type:Schema.Types.ObjectId,
         ref : 'User' // Reference the User model
-    }
+    },
     skills:{
       type:String,
         enum:["Blender",
