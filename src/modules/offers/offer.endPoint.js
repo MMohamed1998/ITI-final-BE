@@ -6,4 +6,5 @@ export const endPoint = {
   deleteOffer: [roles.Designer,roles.Admin],
   userOffer: [roles.Designer],
   userOffer: [roles.Designer],
+  oneOffer: [roles.Designer.roles.Admin,roles.User],
 };
