@@ -9,7 +9,7 @@ import { endPoint } from "./offer.endPoint.js";
 const router = Router();
 
 
-router.get('/:offerId',validation(validators.oneOffer) , offerController.getOffer)
+router.get('/:offerId',auth(endPoint.oneOffer),validation(validators.oneOffer) , offerController.getOffer)
 
 router.get('/usersoffers',auth(endPoint.userOffer),
 offerController.getUserOffers)
