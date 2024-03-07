@@ -9,7 +9,12 @@ import { endPoint } from "./offer.endPoint.js";
 const router = Router();
 
 
-router.get('/:offerId',auth(endPoint.oneOffer),validation(validators.oneOffer) , offerController.getOffer)
+router.get('/oneOffer/:offerId',auth(endPoint.oneOffer),validation(validators.oneOffer) , offerController.getOffer)
+
+router.get('/projectOffer/:projectId',auth(endPoint.projectOffer),validation(validators.projectOffer) , offerController.getProjectOffer)
+
+router.get('/allOffers',auth(endPoint.allOffer),
+offerController.getAllOffer)
 
 router.get('/usersoffers',auth(endPoint.userOffer),
 offerController.getUserOffers)
