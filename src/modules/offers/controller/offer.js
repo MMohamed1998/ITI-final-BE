@@ -10,6 +10,19 @@ export const getOffer = asyncHandler(async (req, res, next) => {
     .populate("createdBy");
   res.status(200).json({ message: `done`, data: offers, success: true });
 });
+export const getProjectOffer = asyncHandler(async (req, res, next) => {
+  const projectId = req.params.projectId;
+  const offers = await offerModel
+    .find({ project: projectId })
+    .populate("createdBy");
+  res.status(200).json({ message: `done`, data: offers, success: true });
+});
+export const getAllOffer = asyncHandler(async (req, res, next) => {
+  const offers = await offerModel
+    .find()
+    .populate("createdBy");
+  res.status(200).json({ message: `done`, data: offers, success: true });
+});
 
 export const getUserOffers = asyncHandler(async (req, res, next) => {
   const userId = req.user;
