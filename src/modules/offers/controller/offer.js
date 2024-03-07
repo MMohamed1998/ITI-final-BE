@@ -40,27 +40,25 @@ export const getUserOffers = asyncHandler(async (req, res, next) => {
 export const addOffer = asyncHandler(async (req, res, next) => {
   const { project, description, price, time } = req.body;
   const userId = req.user;
+  
+  // Check if the user exists
   const user = await userModel.findById(userId);
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));
   }
-  if (!(user.role == "Designer")) {
-    return next(
-      new Error("you are User you can't add offer you should be a designer", {
-        cause: 400,
-      })
-    );
+  
+  // Check if the user is a designer
+  if (user.role !== "Designer") {
+    return next(new Error("Only designers can add offers", { cause: 400 }));
   }
-  const existingOffer = await offerModel.findOne({ createdBy: userId });
+
+  // Check if the user has already added an offer for this project
+  const existingOffer = await offerModel.findOne({ project, createdBy: userId });
   if (existingOffer) {
-    if (project == existingOffer.project) {
-      return next(
-        new Error("You have already added an offer for this Project", {
-          cause: 409,
-        })
-      );
-    }
+    return next(new Error("You have already added an offer for this Project", { cause: 409 }));
   }
+
+  // Create the offer
   const offer = await offerModel.create({
     project,
     description,
@@ -68,18 +66,21 @@ export const addOffer = asyncHandler(async (req, res, next) => {
     time,
     createdBy: userId,
   });
+
+  // Add the offer ID to the project's list of designers' offers
   await projectModel.findOneAndUpdate(
-    { project },
+    { name: project },
     { $push: { designersOffers: offer._id } },
     { returnOriginal: false }
   );
 
   res.status(200).json({
-    message: "User created successfully!",
+    message: "Offer added successfully!",
     data: offer,
     success: true,
   });
 });
+
 
 export const updateOffer = asyncHandler(async (req, res, next) => {
   const { description, price, time } = req.body;
