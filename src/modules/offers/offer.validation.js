@@ -23,3 +23,6 @@ export const oneOffer=Joi.object({
     offerId:generalFields.id
 }).required();
  
+export const projectOffer=Joi.object({
+    projectId:generalFields.id
+}).required();
