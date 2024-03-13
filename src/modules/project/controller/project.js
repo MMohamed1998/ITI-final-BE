@@ -14,6 +14,20 @@ export const getProjects = asyncHandler(async (req, res, next) => {
   res.status(200).json({ message: `done`, data: projects, success: true });
 });
 
+export const projectDetails = asyncHandler(async (req, res, next) => {
+  const projectId=req.params.projectId
+  const projects = await projectModel
+    .findById(projectId)
+    .populate([
+      {
+        path: "offer",
+      },
+    ])
+    .populate("createdBy");
+  res.status(200).json({ message: `done`, data: projects, success: true });
+});
+
+
 export const getUserProjects = asyncHandler(async (req, res, next) => {
   const userId = req.user;
   const projects = await projectModel.find({ createdBy: userId }).populate([

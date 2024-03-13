@@ -14,9 +14,14 @@ router.get('/' , projectController.getProjects)
 router.get('/userProjects',auth(endPoint.userProject),
 projectController.getUserProjects)
 
+router.get('/projectdetails/:projectId',
+projectController.projectDetails)
+
 router.post('/addProject',auth(endPoint.addProject),
 validation(validators.addProject),
 projectController.addProject)
+
+
 
 router.put('/updateProject/:projectId',auth(endPoint.updateProject),
 validation(validators.updateProject),
