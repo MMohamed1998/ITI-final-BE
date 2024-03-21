@@ -13,8 +13,11 @@ const router = Router()
 router.get('/',auth(endPoint.addUsers),
 UserController.getUsers)
 
-router.get('/userProfile/:id',auth(endPoint.update),
+router.get('/userProfile/',auth(endPoint.update),
 UserController.userProfile)
+
+router.get('/userProfile/:id',auth(endPoint.update),
+UserController.userProfileId)
 
 router.post('/addUser',auth(endPoint.addUsers),
 validation(validators.addUser),

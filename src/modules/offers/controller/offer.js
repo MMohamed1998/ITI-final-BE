@@ -18,9 +18,7 @@ export const getProjectOffer = asyncHandler(async (req, res, next) => {
   res.status(200).json({ message: `done`, data: offers, success: true });
 });
 export const getAllOffer = asyncHandler(async (req, res, next) => {
-  const offers = await offerModel
-    .find()
-    .populate("createdBy");
+  const offers = await offerModel.find().populate("createdBy");
   res.status(200).json({ message: `done`, data: offers, success: true });
 });
 
@@ -40,22 +38,29 @@ export const getUserOffers = asyncHandler(async (req, res, next) => {
 export const addOffer = asyncHandler(async (req, res, next) => {
   const { project, description, price, time } = req.body;
   const userId = req.user;
-  
+
   // Check if the user exists
   const user = await userModel.findById(userId);
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));
   }
-  
+
   // Check if the user is a designer
   if (user.role !== "Designer") {
     return next(new Error("Only designers can add offers", { cause: 400 }));
   }
 
   // Check if the user has already added an offer for this project
-  const existingOffer = await offerModel.findOne({ project, createdBy: userId });
+  const existingOffer = await offerModel.findOne({
+    project,
+    createdBy: userId,
+  });
   if (existingOffer) {
-    return next(new Error("You have already added an offer for this Project", { cause: 409 }));
+    return next(
+      new Error("You have already added an offer for this Project", {
+        cause: 409,
+      })
+    );
   }
 
   // Create the offer
@@ -81,21 +86,14 @@ export const addOffer = asyncHandler(async (req, res, next) => {
   });
 });
 
-
 export const updateOffer = asyncHandler(async (req, res, next) => {
-  const { description, price, time } = req.body;
+  const { description, price, time, status } = req.body;
   const userId = req.user;
   const offerId = req.params.offerId;
+  const user = await userModel.findById(userId);
   const offer = await offerModel.findById(offerId);
   if (!offer) {
     return next(new Error("offer not found", { code: 404 }));
-  }
-  if (offer.createdBy != userId) {
-    return next(
-      new Error("You don't have permission to perform this action.", {
-        code: 404,
-      })
-    );
   }
 
   let newOffer = await offerModel.findByIdAndUpdate(
@@ -105,6 +103,7 @@ export const updateOffer = asyncHandler(async (req, res, next) => {
       price,
       time,
       updatedBy: userId,
+      status,
     },
     { new: true }
   );

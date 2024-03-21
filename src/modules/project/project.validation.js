@@ -7,7 +7,8 @@ export const addProject = Joi.object({
     expectedPrice: Joi.string().valid("25 - 50$","50 - 100$","100 - 250$","250 - 500$","500 - 1000$","1000 - 2500$","2500 -5000$","5000 - 10000$").required(),
     expectedTime: Joi.number().min(1).max(90).required(), 
     category:Joi.string().valid("flats","hotels","offices","companies","restaurants"),
-    skills : Joi.array()
+    skills : Joi.array(),
+    lines : Joi.array()
   
 }).required();
 
@@ -18,7 +19,9 @@ export const updateProject=Joi.object({
     expectedTime: Joi.number().min(1).max(90), 
     category:generalFields.optionalId,
     projectId:generalFields.id,
-    skills : Joi.array()
+    skills : Joi.array(),
+    lines : Joi.array(),
+    status:Joi.string().valid("open","closed","completed")
 }).required();
 
 export const deleteProject=Joi.object({

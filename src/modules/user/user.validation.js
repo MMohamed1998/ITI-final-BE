@@ -16,6 +16,7 @@ export const addUser = Joi.object({
   city:Joi.string(),
   role: Joi.string().valid("User", "Designer","Admin"),
   skills:Joi.array()
+
 }).required();
 
 export const updateUser = Joi.object({
@@ -25,7 +26,9 @@ export const updateUser = Joi.object({
   password: generalFields.password,
   role: Joi.string().valid("User", "Admin", "Designer"),
   gender: Joi.string().valid("male", "female"),
-  skills:Joi.array()
+  skills:Joi.array(),
+  about:Joi.string(),
+
 }).required();
 
 export const changePassword = Joi.object({

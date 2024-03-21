@@ -17,12 +17,18 @@ export const fileValidation = {
 
 
 export function fileUpload(customPath = "general", customValidation = []) {
+  console.log("first")
   const fullPath = path.join(__dirname, "..", "..", "uploads", `${customPath}`);
   if (!fs.existsSync(fullPath)) {
     fs.mkdirSync(fullPath, { recursive: true });
   }
+  console.log("second")
+
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
+  console.log(file)
+  console.log("second")
+
       cb(null, fullPath);
     },
     filename: (req, file, cb) => {
@@ -31,11 +37,13 @@ export function fileUpload(customPath = "general", customValidation = []) {
         "-" +
         nanoid() +
         Math.round(Math.random() * 1e9) +
-        file.originalname;
+        file.name;
       file.finalDest = `uploads/${customPath}/${fullName}`;
       cb(null, fullName);
     },
   });
+  console.log(storage)
+
   function fileFilter(req, file, cb) {
     if (customValidation.includes(file.mimetype)) {
       cb(null, true);

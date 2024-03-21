@@ -28,6 +28,9 @@ const userSchema = new Schema(
     city:{
       type :String ,
     },
+    about:{
+      type :String
+    },
     role: {
       type: String,
       enum: ["User", "Admin", "Designer"],
@@ -60,6 +63,11 @@ const userSchema = new Schema(
     changePasswordTime: {
       type: Date,
     },
+    rate:{
+      type:Number,
+      min:[1],
+      max:[5]
+    }
   },
   {
     timestamps: true,

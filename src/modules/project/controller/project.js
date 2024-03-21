@@ -44,7 +44,7 @@ export const getUserProjects = asyncHandler(async (req, res, next) => {
 });
 
 export const addProject = asyncHandler(async (req, res, next) => {
-  const { title, description, expectedPrice, expectedTime, category, skills } =
+  const { title, description, expectedPrice, expectedTime, category, skills ,lines} =
     req.body;
   const userId = req.user;
   const user = await userModel.findById(userId);
@@ -64,6 +64,7 @@ export const addProject = asyncHandler(async (req, res, next) => {
     category,
     createdBy: userId,
     skills,
+    lines
   });
   res
     .status(200)
@@ -75,8 +76,8 @@ export const addProject = asyncHandler(async (req, res, next) => {
 });
 
 export const updateProject = asyncHandler(async (req, res, next) => {
-  const { title, description, expectedPrice, expectedTime, category, skills } =
-    req.body;
+  const { title, description, expectedPrice, expectedTime, category, skills,lines,status  } = req.body;
+  console.log(req.body)
   const userId = req.user;
   const projectId = req.params.projectId;
   const project = await projectModel.findById(projectId);
@@ -84,7 +85,7 @@ export const updateProject = asyncHandler(async (req, res, next) => {
     return next(new Error("project not found", { code: 404 }));
   }
 
-  if (!(project.createdBy == userId)) {
+  if (!(project.createdBy._id == userId)) {
     return next(
       new Error("You don't have permission to perform this action.", {
         code: 404,
@@ -102,6 +103,9 @@ export const updateProject = asyncHandler(async (req, res, next) => {
       category,
       updatedBy: userId,
       skills,
+      lines,
+      status
+
     },
     { new: true }
   );

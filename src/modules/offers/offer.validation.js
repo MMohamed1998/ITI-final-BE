@@ -12,7 +12,8 @@ export const updateOffer=Joi.object({
     description: Joi.string(),
     price:Joi.number().min(25).max(10000), 
     time:Joi.number().min(1).max(90),
-    offerId:generalFields.id
+    offerId:generalFields.id,
+    status:Joi.string().valid("pending", "accepted", "rejected")
 }).required();
 
 export const deleteOffer=Joi.object({
