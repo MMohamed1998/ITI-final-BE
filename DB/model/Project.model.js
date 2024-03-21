@@ -49,7 +49,7 @@ const projectSchema = new Schema(
         
     },
     lines:{
-      type:[String],
+      type:[{}],
         
     }
   },
