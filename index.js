@@ -15,12 +15,12 @@ import projectRouter from "./src/modules/project/project.router.js";
 import offerRouter from "./src/modules/offers/offer.router.js";
 import { globalErrorHandling } from "./src/utils/errorHandling.js";
 import cookieParser from "cookie-parser";
+import { app, server } from "./socket/socket.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, "./config/.env") });
 
 
 const port = process.env.PORT || 5000;
-const app = express();
 const allowedOrigins = ['http://localhost:5174', 'http://localhost:5173'];
 app.use(cors({
   origin: function(origin, callback) {
@@ -82,6 +82,6 @@ app.all("*", (req, res, next) => {
 app.use(globalErrorHandling);
 
 connectDB();
-app.listen(port, () =>
+server.listen(port, () =>
   console.log(chalk.yellow(`Example app listening on port ${port}!`))
 );
