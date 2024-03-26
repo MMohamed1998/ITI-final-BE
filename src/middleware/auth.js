@@ -1,6 +1,8 @@
 import userModel from "../../DB/model/User.model.js";
 import { verifyToken } from "../utils/GenerateAndVerifyToken.js";
 import { asyncHandler } from "../utils/errorHandling.js";
+
+
 export const roles = {
   Admin: "Admin",
   User: "User",
@@ -38,5 +40,7 @@ export const auth = (accessRoles = []) => {
     return next();
   });
 };
+
+
 
 export default auth;

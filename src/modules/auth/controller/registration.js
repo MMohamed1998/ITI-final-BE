@@ -451,7 +451,6 @@ export const logOut = asyncHandler(async (req, res, next) => {
   
   const userId =req.user
   const user = await userModel.findById(userId);
-  console.log(user)
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));
   }

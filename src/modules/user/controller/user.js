@@ -26,16 +26,13 @@ export const getUsers = asyncHandler(async (req, res, next) => {
 
 export const userProfile = asyncHandler(async (req, res, next) => {
     const userId = req.user;
-    console.log("user",userId)
     const user = await userModel.findById(userId);
     res.status(200).json({ message: "User deleted successfully!", data:user,success:true });
   });
 
   export const userProfileId = asyncHandler(async (req, res, next) => {
-    console.log(req.params.id);
     if (req.params.id !== undefined) {
         const userId = req.params.id;
-        console.log("User ID from params:", userId);
         const user = await userModel.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found", success: false });
@@ -43,7 +40,6 @@ export const userProfile = asyncHandler(async (req, res, next) => {
         return res.status(200).json({ message: "User found successfully!", data: user, success: true });
     } else if (req.user) {
         const userId = req.user;
-        console.log("User ID from logged in user:", userId);
         const user = await userModel.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found", success: false });
@@ -196,7 +192,6 @@ export const addUsers = asyncHandler(async (req, res, next) => {
 export const addUserImage = asyncHandler(async (req, res, next) => {
   const userId = req.user;
   const profileImage = req.file;
-   console.log("image",profileImage);
   const user = await userModel.findById(userId);
   if (!user) {
     return next(new Error("No User found with this Id!", { cause: 400 }));

@@ -19,5 +19,13 @@ const messageSchema = new Schema(
   },
   { timestamps: true }
 );
+messageSchema.pre(/^find/, function(next) {
+  this.populate('senderId')
+  next();
+});
+messageSchema.pre(/^find/, function(next) {
+  this.populate('receiverId')
+  next();
+});
 const messageModel = mongoose.models.Message || model("Message", messageSchema);
 export default messageModel;

@@ -7,7 +7,11 @@ export const getOffer = asyncHandler(async (req, res, next) => {
   const offerId = req.params.offerId;
   const offers = await offerModel
     .findOne({ _id: offerId })
-    .populate("createdBy");
+    .populate("createdBy").populate([
+      {
+        path: "project",
+      },
+    ]);
   res.status(200).json({ message: `done`, data: offers, success: true });
 });
 export const getProjectOffer = asyncHandler(async (req, res, next) => {
