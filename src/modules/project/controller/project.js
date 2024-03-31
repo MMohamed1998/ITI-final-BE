@@ -1,17 +1,20 @@
 import projectModel from "../../../../DB/model/Project.model.js";
 import userModel from "../../../../DB/model/User.model.js";
+import { ApiFeatures } from "../../../utils/ApiFeatures.js";
 import { asyncHandler } from "../../../utils/errorHandling.js";
 
 export const getProjects = asyncHandler(async (req, res, next) => {
-  const projects = await projectModel
+  console.log(req.query)
+  const apiFeature= new ApiFeatures(projectModel
     .find()
     .populate([
       {
         path: "offer",
       },
     ])
-    .populate("createdBy");
-  res.status(200).json({ message: `done`, data: projects, success: true });
+     .populate("createdBy"),req.query)//.paginate().search().filter().sort().fields()
+  const projects = await apiFeature.mongooseQuery
+  res.status(200).json({ message: `done`,page:apiFeature.page, data: projects, success: true });
 });
 
 export const projectDetails = asyncHandler(async (req, res, next) => {

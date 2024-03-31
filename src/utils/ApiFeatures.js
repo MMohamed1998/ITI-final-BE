@@ -1,19 +1,19 @@
-export class apiFeatures{
+export class ApiFeatures{
 
     constructor(mongooseQuery,queryString){
         this.mongooseQuery= mongooseQuery;
         this.queryString = queryString
     }
-
+    
     // 1-pagination................................................
     paginate(){
-        let PAGE_LIMIT=10
-        let PAGE_NUMBER=this.queryString.page * 1 || 1
-        if(this.queryString.PAGE_NUMBER<=0) PAGE_NUMBER= 1
-        let SKIP =(PAGE_NUMBER - 1) * PAGE_LIMIT
-        this.PAGE_LIMIT=PAGE_LIMIT
-        this.PAGE_NUMBER=PAGE_NUMBER
-        this.mongooseQuery.skip(SKIP).limit(PAGE_LIMIT)
+        let size=this.queryString.size ||5
+        let page=this.queryString.page * 1 || 1
+        if(this.queryString.page<=0) page= 1
+        let SKIP =(page - 1) * size
+        this.size=size
+        this.page=page
+        this.mongooseQuery.skip(SKIP).limit(size)
         return this;
     }
 

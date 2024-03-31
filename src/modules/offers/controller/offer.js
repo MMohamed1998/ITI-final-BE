@@ -5,6 +5,7 @@ import { asyncHandler } from "../../../utils/errorHandling.js";
 
 export const getOffer = asyncHandler(async (req, res, next) => {
   const offerId = req.params.offerId;
+  
   const offers = await offerModel
     .findOne({ _id: offerId })
     .populate("createdBy").populate([

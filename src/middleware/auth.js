@@ -37,6 +37,7 @@ export const auth = (accessRoles = []) => {
       return next(new Error("Not authorized user", { cause: 403 }));
     }
     req.user = decoded.id;
+    
     return next();
   });
 };
