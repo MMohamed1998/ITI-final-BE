@@ -16,6 +16,9 @@ const messageSchema = new Schema(
       type: String,
       required: true,
     },
+    fileUrl:{
+      type:String
+    }
   },
   { timestamps: true }
 );

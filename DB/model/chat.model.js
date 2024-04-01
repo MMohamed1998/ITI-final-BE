@@ -14,6 +14,9 @@ const chatSchema = new Schema(
         },
       },
     ],
+    fileUrl:{
+      type:String
+    }
   },
   {
     timestamps: true,

@@ -9,9 +9,6 @@ export const sendMessage = async (req, res) => {
     const { message } = req.body;
     const { id: receiverId } = req.params;
     const senderId = req.user;
-    console.log(Message)
-    console.log(receiverId)
-    console.log(senderId)
 
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
@@ -27,6 +24,7 @@ export const sendMessage = async (req, res) => {
       senderId,
       receiverId,
       message,
+      
     });
 
     if (newMessage) {
@@ -111,7 +109,7 @@ export const sendNotification = async (req, res) => {
     // Example: Send a socket.io notification
     const receiverSocketId = getReceiverSocketId(receiverId); // Assuming you have this function
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit("notification", { receiverId,  notification: {
+      io.to(receiverSocketId).emit("messageNotification", { receiverId,  notification: {
         userId: sender._id,
         name: sender.userName,
         content: notification 
